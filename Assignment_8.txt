@@ -1,0 +1,113 @@
+sumit-Inspiron-15-3580% sudo mysql
+[sudo] password for sumit:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.37-0ubuntu0.22.04.3 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| Employee         |
+| EmployeeDB         |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| wrc                |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> use Employee;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_Employee |
++----------------------+
+| Dept                 |
+| Emp                  |
+| EmployeeManager      |
++----------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT e.*
+    -> FROM Emp e
+    -> JOIN Dept d ON e.deptno = d.deptno;
++-------+---------------+---------------+------+------------+---------+--------+--------+
+| empno | ename         | job           | mgr  | hiredate   | sal     | comm   | deptno |
++-------+---------------+---------------+------+------------+---------+--------+--------+
+|   101 | Naresh Sharma | Manager       | NULL | 1993-07-21 | 6900.00 | 500.00 |     10 |
+|   102 | Sita Rai      | Clerk         |  101 | 1995-01-10 | 3000.00 | 200.00 |     10 |
+|   103 | Rupaak Kumar  | Salesman      |  101 | 2000-06-15 | 3500.00 | 300.00 |     10 |
+|   104 | Nisha Thapa   | Manager       | NULL | 2000-05-12 | 6500.00 | 400.00 |     20 |
+|   105 | Jyoti Joshi   | Analyst       |  104 | 2002-03-09 | 4000.00 | 250.00 |     20 |
+|   106 | Hari Kumar    | HR Executive  | NULL | 1990-09-30 | 5750.00 | 150.00 |     30 |
+|   107 | Anita Sharma  | IT Specialist | NULL | 2015-11-22 | 7000.00 | 300.00 |     40 |
++-------+---------------+---------------+------+------------+---------+--------+--------+
+7 rows in set (0.00 sec)
+
+
+mysql> SELECT e.ename AS Employee_Name, d.dname AS Department_Name
+    -> FROM Emp e
+    -> LEFT JOIN Dept d ON e.deptno = d.deptno;
++---------------+-----------------+
+| Employee_Name | Department_Name |
++---------------+-----------------+
+| Naresh Sharma | Sales           |
+| Sita Rai      | Sales           |
+| Rupaak Kumar  | Sales           |
+| Nisha Thapa   | Marketing       |
+| Jyoti Joshi   | Marketing       |
+| Hari Kumar    | HR              |
+| Anita Sharma  | IT              |
++---------------+-----------------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT e.ename AS Employee_Name, d.dname AS Department_Name
+    -> FROM Emp e
+    -> RIGHT JOIN Dept d ON e.deptno = d.deptno;
++---------------+-----------------+
+| Employee_Name | Department_Name |
++---------------+-----------------+
+| Naresh Sharma | Sales           |
+| Sita Rai      | Sales           |
+| Rupaak Kumar  | Sales           |
+| Nisha Thapa   | Marketing       |
+| Jyoti Joshi   | Marketing       |
+| Hari Kumar    | HR              |
+| Anita Sharma  | IT              |
++---------------+-----------------+
+7 rows in set (0.00 sec)
+
+
+mysql> WITH AvgSal AS (
+    ->     SELECT AVG(sal) AS Average_Salary
+    ->     FROM Emp
+    -> )
+    -> SELECT e.*
+    -> FROM Emp e
+    -> JOIN AvgSal a ON e.sal > a.Average_Salary;
++-------+---------------+---------------+------+------------+---------+--------+--------+
+| empno | ename         | job           | mgr  | hiredate   | sal     | comm   | deptno |
++-------+---------------+---------------+------+------------+---------+--------+--------+
+|   101 | Naresh Sharma | Manager       | NULL | 1993-07-21 | 6900.00 | 500.00 |     10 |
+|   104 | Nisha Thapa   | Manager       | NULL | 2000-05-12 | 6500.00 | 400.00 |     20 |
+|   106 | Hari Kumar    | HR Executive  | NULL | 1990-09-30 | 5750.00 | 150.00 |     30 |
+|   107 | Anita Sharma  | IT Specialist | NULL | 2015-11-22 | 7000.00 | 300.00 |     40 |
++-------+---------------+---------------+------+------------+---------+--------+--------+
+4 rows in set (0.00 sec)
+
+mysql>

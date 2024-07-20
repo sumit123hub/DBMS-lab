@@ -1,0 +1,101 @@
+sumit-Inspiron-15-3580% sudo mysql
+[sudo] password for sumit:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.37-0ubuntu0.22.04.3 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+
+mysql> use Assignment;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> CREATE TABLE Teacher (
+    ->     Id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     Name VARCHAR(100),
+    ->     Date_of_joining DATE,
+     ->    DeptNo INT,
+    ->     Date_of_joining DATE,
+    ->     DeptName VARCHAR(100),
+    ->     Location VARCHAR(100),
+    ->     Salary DECIMAL(10, 2)
+    -> ;
+);
+Query OK, 0 rows affected (0.14 sec)
+
+
+mysql> INSERT INTO Teacher (Name, DeptNo, Date_of_joining, DeptName, Location, Salary) VALUES
+    -> ('Harry', 101, '2020-01-15', 'Mathematics', 'New York', 50000),
+    -> ('Sam', 102, '2019-03-22', 'Commerce', 'Chicago', 55000),
+    -> ('Jenny', 103, '2018-07-30', 'Science', 'Los Angeles', 60000),
+    -> ('Mave', 104, '2021-05-14', 'Mathematics', 'Boston', 52000),
+    -> ('Ben', 105, '2022-09-05', 'Commerce', 'San Francisco', 58000);
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> START TRANSACTION;
+    -> UPDATE Teacher
+    -> SET Salary = Salary * 1.25
+    -> WHERE DeptName = 'Mathematics';
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT *
+    -> FROM Teacher;
++----+-------+--------+-----------------+-------------+---------------+----------+
+| Id | Name  | DeptNo | Date_of_joining | DeptName    | Location      | Salary   |
++----+-------+--------+-----------------+-------------+---------------+----------+
+|  1 | Harry |    101 | 2020-01-15      | Mathematics | New York      | 62500.00 |
+|  2 | Sam   |    102 | 2019-03-22      | Commerce    | Chicago       | 55000.00 |
+|  3 | Jenny |    103 | 2018-07-30      | Science     | Los Angeles   | 60000.00 |
+|  4 | Mave  |    104 | 2021-05-14      | Mathematics | Boston        | 65000.00 |
+|  5 | Ben   |    105 | 2022-09-05      | Commerce    | San Francisco | 58000.00 |
++----+-------+--------+-----------------+-------------+---------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> ROLLBACK;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT *  FROM Teacher;
++----+-------+--------+-----------------+-------------+---------------+----------+
+| Id | Name  | DeptNo | Date_of_joining | DeptName    | Location      | Salary   |
++----+-------+--------+-----------------+-------------+---------------+----------+
+|  1 | Harry |    101 | 2020-01-15      | Mathematics | New York      | 50000.00 |
+|  2 | Sam   |    102 | 2019-03-22      | Commerce    | Chicago       | 55000.00 |
+|  3 | Jenny |    103 | 2018-07-30      | Science     | Los Angeles   | 60000.00 |
+|  4 | Mave  |    104 | 2021-05-14      | Mathematics | Boston        | 52000.00 |
+|  5 | Ben   |    105 | 2022-09-05      | Commerce    | San Francisco | 58000.00 |
++----+-------+--------+-----------------+-------------+---------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> START TRANSACTION;
+    -> UPDATE Teacher
+    -> SET Salary = Salary * 1.15
+    -> WHERE DeptName = 'Commerce';
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> COMMIT;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT *  FROM Teacher;
++----+-------+--------+-----------------+-------------+---------------+----------+
+| Id | Name  | DeptNo | Date_of_joining | DeptName    | Location      | Salary   |
++----+-------+--------+-----------------+-------------+---------------+----------+
+|  1 | Harry |    101 | 2020-01-15      | Mathematics | New York      | 50000.00 |
+|  2 | Sam   |    102 | 2019-03-22      | Commerce    | Chicago       | 63250.00 |
+|  3 | Jenny |    103 | 2018-07-30      | Science     | Los Angeles   | 60000.00 |
+|  4 | Mave  |    104 | 2021-05-14      | Mathematics | Boston        | 52000.00 |
+|  5 | Ben   |    105 | 2022-09-05      | Commerce    | San Francisco | 66700.00 |
++----+-------+--------+-----------------+-------------+---------------+----------+
+5 rows in set (0.00 sec)
+
+mysql>

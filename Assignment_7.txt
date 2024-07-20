@@ -1,0 +1,99 @@
+sumit-Inspiron-15-3580% sudo mysql
+[sudo] password for sumit:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.37-0ubuntu0.22.04.3 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use Employee;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_Employee |
++----------------------+
+| Dept                 |
+| Emp                  |
+| EmployeeManager      |
++----------------------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT e1.ename AS Employee_Name, e2.ename AS Manager_Name
+    -> FROM Emp e1
+    -> JOIN Emp e2 ON e1.mgr = e2.empno
+    -> WHERE e1.sal > e2.sal;
+Empty set (0.00 sec)
+
+mysql> WITH MaxSal AS (
+    ->     SELECT deptno, MAX(sal) AS Max_Salary
+    ->     FROM Emp
+    ->     GROUP BY deptno
+    ->   )
+    -> SELECT e.ename AS Employee_Name, e.deptno, e.sal
+    -> FROM Emp e
+    -> JOIN MaxSal ms ON e.deptno = ms.deptno AND e.sal = ms.Max_Salary;
++---------------+--------+---------+
+| Employee_Name | deptno | sal     |
++---------------+--------+---------+
+| Naresh Sharma |     10 | 6900.00 |
+| Nisha Thapa   |     20 | 6500.00 |
+| Ravi Kumar    |     30 | 5750.00 |
+| Anita Sharma  |     40 | 7000.00 |
++---------------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> WITH EmpLoc AS (
+    ->     SELECT e1.ename AS Employee_Name, d1.loc AS Location
+    ->     FROM Emp e1
+    ->     JOIN Dept d1 ON e1.deptno = d1.deptno
+    ->     Emp e2 ON e1.deptno = e2.deptno
+    ->     JOIN Dept d2 ON e2.deptno = d2.deptno
+    ->      WHERE d1.loc = d2.loc AND e1.empno <> e2.empno
+    -> )
+    -> SELECT DISTINCT Employee_Name, Location
+    -> FROM EmpLoc;
++---------------+-------------+
+| Employee_Name | Location    |
++---------------+-------------+
+| Naresh Sharma | New York    |
+| Sita Rai      | New York    |
+| Rupaak Kumar  | New York    |
+| Nisha Thapa   | Los Angeles |
+| Anita Joshi   | Los Angeles |
++---------------+-------------+
+5 rows in set (0.01 sec)
+
+mysql> WITH MinSal AS (
+    -> SELECT deptno, MIN(sal) AS Min_Salary
+    ->     FROM Emp
+    ->     GROUP BY deptno
+    -> )
+    -> SELECT e.ename AS Employee_Name, e.sal, e.deptno
+    -> FROM Emp e
+    -> JOIN MinSal ms ON e.deptno = ms.deptno AND e.sal = ms.Min_Salary;
++---------------+---------+--------+
+| Employee_Name | sal     | deptno |
++---------------+---------+--------+
+| Sita Rai      | 3000.00 |     10 |
+| Anita Joshi   | 4000.00 |     20 |
+| Ravi Kumar    | 5750.00 |     30 |
+| Anita Sharma  | 7000.00 |     40 |
++---------------+---------+--------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT d.deptno, d.dname
+    -> FROM Dept d
+    -> LEFT JOIN Emp e ON d.deptno = e.deptno
+    -> WHERE e.empno IS NULL;
+Empty set (0.00 sec)
+
+mysql>

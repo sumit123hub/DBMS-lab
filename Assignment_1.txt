@@ -1,0 +1,136 @@
+sumit-Inspiron-15-3580% sudo mysql
+[sudo] password for sumit:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.37-0ubuntu0.22.04.3 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE Assignment;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| Assignment         |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.01 sec)
+
+mysql> 
+
+mysql> USE Assignment;
+Database changed
+mysql> CREATE TABLE Employees (
+    ->     Emp_id INT PRIMARY KEY,
+    ->     First_name VARCHAR(50),
+    ->     Last_name VARCHAR(50),
+    ->     Phone_No VARCHAR(15),
+    ->     Hire_date DATE,
+    ->     Job_id VARCHAR(10),
+    ->     Emp_Salary DECIMAL(10, 2),
+    ->     Commission_Pct DECIMAL(5, 2),
+    ->     Manager_id INT,
+    ->     Department_id INT,
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> INSERT INTO Employees (Emp_id, First_name, Last_name, Phone_No, Hire_date, Job_id, Emp_Salary, Commission_Pct, Manager_id, Department_id)
+   -> VALUES
+    -> (1, 'Jyoti', 'Thapa', '555-1234', '2020-01-01', 'IT_PROG', 6000, 0.10, 101, 60),
+    -> (2, 'Amrit', 'Shrestha', '555-5678', '2019-03-15', 'HR_REP', 4800, 0.05, 102, 70),
+    -> (3, 'Hari', 'Gurung', '555-8765', '2018-07-22', 'IT_PROG', 5000, NULL, 101, 60),
+    -> (4, 'Sumit', 'Austin', '555-4321', '2021-11-01', 'MK_MAN', 5500, 0.12, 103, 80),
+    -> (5, 'Salman', 'Karki', '555-6789', '2017-06-30', 'HR_REP', 4500, NULL, 102, 70);
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+
+mysql> SELECT * FROM Employees;
++--------+------------+-----------+----------+------------+---------+------------+----------------+------------+---------------+
+| Emp_id | First_name | Last_name | Phone_No | Hire_date  | Job_id  | Emp_Salary | Commission_Pct | Manager_id | Department_id |
++--------+------------+-----------+----------+------------+---------+------------+----------------+------------+---------------+
+|      1 | Jyoti      | Thapa     | 555-1234 | 2020-01-01 | IT_PROG |    6000.00 |           0.10 |        101 |            60 |
+|      2 | Amrit      | Shrestha  | 555-5678 | 2019-03-15 | HR_REP  |    4800.00 |           0.05 |        102 |            70 |
+|      3 | Hari       | Gurung    | 555-8765 | 2018-07-22 | IT_PROG |    5000.00 |           NULL |        101 |            60 |
+|      4 | Sumit      | Austin    | 555-4321 | 2021-11-01 | MK_MAN  |    5500.00 |           0.12 |        103 |            80 |
+|      5 | Salman     | Karki     | 555-6789 | 2017-06-30 | HR_REP  |    4500.00 |           NULL |        102 |            70 |
++--------+------------+-----------+----------+------------+---------+------------+----------------+------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT Emp_id, First_name, Last_name, Emp_Salary
+    -> FROM Employees;
++--------+------------+-----------+------------+
+| Emp_id | First_name | Last_name | Emp_Salary |
++--------+------------+-----------+------------+
+|      1 | Jyoti      | Thapa     |    6000.00 |
+|      2 | Amrit      | Shrestha  |    4800.00 |
+|      3 | Hari       | Gurung    |    5000.00 |
+|      4 | Sumit      | Austin    |    5500.00 |
+|      5 | Salman     | Karki     |    4500.00 |
++--------+------------+-----------+------------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT First_name, Last_name
+    -> FROM Employees
+    -> WHERE Emp_Salary >= 4800;
++------------+-----------+
+| First_name | Last_name |
++------------+-----------+
+| Jyoti      | Thapa     |
+| Amrit      | Shrestha  |
+| Hari       | Gurung    |
+| Sumit      | Austin    |
++------------+-----------+
+4 rows in set (0.00 sec)
+
+
+mysql> SELECT *
+    -> FROM Employees
+    -> WHERE Last_name = 'Austin';
++--------+------------+-----------+----------+------------+--------+------------+----------------+------------+---------------+
+| Emp_id | First_name | Last_name | Phone_No | Hire_date  | Job_id | Emp_Salary | Commission_Pct | Manager_id | Department_id |
++--------+------------+-----------+----------+------------+--------+------------+----------------+------------+---------------+
+|      4 | Sumit      | Austin    | 555-4321 | 2021-11-01 | MK_MAN |    5500.00 |           0.12 |        103 |            80 |
++--------+------------+-----------+----------+------------+--------+------------+----------------+------------+---------------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT First_name, Last_name
+    -> FROM Employees
+    -> WHERE Department_id IN (60, 70, 80);
++------------+-----------+
+| First_name | Last_name |
++------------+-----------+
+| Jyoti      | Thapa     |
+| Amrit      | Shrestha  |
+| Hari       | Gurung    |
+| Sumit      | Austin    |
+| Salman     | Karki     |
++------------+-----------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT DISTINCT Manager_id
+    -> FROM Employees;
++------------+
+| Manager_id |
++------------+
+|        101 |
+|        102 |
+|        103 |
++------------+
+3 rows in set (0.00 sec)
+
+mysql>

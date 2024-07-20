@@ -1,0 +1,92 @@
+sumit-Inspiron-15-3580% sudo mysql
+[sudo] password for sumit:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.37-0ubuntu0.22.04.3 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+
+mysql> use Assignment;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> CREATE TABLE Sales (
+    -> Sales_No INT PRIMARY KEY,
+    -> Sales_Name VARCHAR(50),
+    -> Branch VARCHAR(50),
+    -> Sales_Amount DECIMAL(10, 2),
+    -> DOB DATE
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+
+mysql> INSERT INTO Sales (Sales_No, Sales_Name, Branch, Sales_Amount, DOB) VALUES
+    -> (1, 'Naresh Sharma', 'North', 1500.00, '1985-12-15'),
+    -> (2, 'Sita Rai', 'South', 2000.00, '1990-03-22'),
+    -> (3, 'Hari Kumar', 'North', 1800.00, '1988-07-30'),
+    -> (4, 'Nisha Thapa', 'East', 2200.00, '1992-12-05'),
+    -> (5, 'Jyoti Joshi', 'South', 1700.00, '1987-11-20');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT Branch, SUM(Sales_Amount) AS Total_Sales_Amount
+    -> FROM Sales
+    -> GROUP BY Branch;
++--------+--------------------+
+| Branch | Total_Sales_Amount |
++--------+--------------------+
+| North  |            3300.00 |
+| South  |            3700.00 |
+| East   |            2200.00 |
++--------+--------------------+
+3 rows in set (0.01 sec)
+
+
+mysql> SELECT Branch, AVG(Sales_Amount) AS Average_Sales_Amount
+    -> FROM Sales
+    -> GROUP BY Branch;
++--------+----------------------+
+| Branch | Average_Sales_Amount |
++--------+----------------------+
+| North  |          1650.000000 |
+| South  |          1850.000000 |
+| East   |          2200.000000 |
++--------+----------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT Sales_Name, DATE_FORMAT(DOB, '%d-%b-%y') AS Formatted_DOB
+    -> FROM Sales
+    -> WHERE MONTH(DOB) = 12;
++---------------+---------------+
+| Sales_Name    | Formatted_DOB |
++---------------+---------------+
+| Naresh Sharma | 15-Dec-85     |
+| Nisha Thapa   | 05-Dec-92     |
++---------------+---------------+
+2 rows in set (0.00 sec)
+
+
+mysql> SELECT Sales_Name, DATE_FORMAT(DOB, '%d-%b-%y') AS Formatted_DOB
+les_Name;
+    -> FROM Sales
+    -> ORDER BY EXTRACT(MONTH FROM DOB), Sales_Name;
++---------------+---------------+
+| Sales_Name    | Formatted_DOB |
++---------------+---------------+
+| Sita Rai      | 22-Mar-90     |
+| Hari Kumar    | 30-Jul-88     |
+| Jyoti Joshi   | 20-Nov-87     |
+| Nisha Thapa   | 05-Dec-92     |
+| Naresh Sharma | 15-Dec-85     |
++---------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql>

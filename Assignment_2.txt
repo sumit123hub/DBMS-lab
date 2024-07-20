@@ -1,0 +1,110 @@
+sumit-Inspiron-15-3580% sudo mysql
+[sudo] password for sumit:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.37-0ubuntu0.22.04.3 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use Assignment;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_Assignment |
++----------------------+
+| Employees            |
++----------------------+
+1 row in set (0.01 sec)
+
+
+
+mysql> CREATE TABLE Client_Master (
+    -> ClientNO VARCHAR(10) PRIMARY KEY,
+    -> Name VARCHAR(100),
+    -> Address VARCHAR(200),
+    -> City VARCHAR(50),
+    -> State VARCHAR(50),
+    -> bal_due DECIMAL(10, 2)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+
+mysql> INSERT INTO Client_Master (ClientNO, Name, Address, City, State, bal_due)
+    -> VALUES
+    -> ('C123', 'Tilak Sharma', 'Kumaripati, Lalitpur', 'Lalitpur', 'Bagmati', 6000.00),
+    -> ('C124', 'Janaki', 'Lakeside, Pokhara', 'Pokhara', 'Gandaki', 4500.00),
+    -> ('C125', 'Ramu Mahato', 'Biratnagar-4, Biratnagar', 'Biratnagar', 'Province 1', 5200.00),
+    -> ('C126', 'Sita Khavas', 'Putalisadak, Kathmandu', 'Kathmandu', 'Bagmati', 7000.00),
+    -> Dharan', 'Dharan('C127', 'Aryan Mishra', 'Dharan-8, Dharan', 'Dharan', 'Province 1', 3000.00);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+
+mysql> SELECT * FROM Client_Master;
++----------+--------------+--------------------------+------------+------------+---------+
+| ClientNO | Name         | Address                  | City       | State      | bal_due |
++----------+--------------+--------------------------+------------+------------+---------+
+| C123     | Tilak Sharma | Kumaripati, Lalitpur     | Lalitpur   | Bagmati    | 6000.00 |
+| C124     | Janaki       | Lakeside, Pokhara        | Pokhara    | Gandaki    | 4500.00 |
+| C125     | Ramu Mahato  | Biratnagar-4, Biratnagar | Biratnagar | Province 1 | 5200.00 |
+| C126     | Sita Khavas  | Putalisadak, Kathmandu   | Kathmandu  | Bagmati    | 7000.00 |
+| C127     | Aryan Mishra | Dharan-8, Dharan         | Dharan     | Province 1 | 3000.00 |
++----------+--------------+--------------------------+------------+------------+---------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT Name
+    -> FROM Client_Master
+    -> WHERE bal_due > 5000;
++-------------+
+| Name        |
++-------------+
+| Tilak Sharma|
+| Ramu Mahato |
+| Sita Khavas |
++-------------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE Client_Master
+    -> SET bal_due = 5100.00
+    -> WHERE ClientNO = 'C123';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+mysql> ALTER TABLE Client_Master RENAME TO Client12;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++----------------------+
+| Tables_in_Assignment |
++----------------------+
+| Client12             |
+| Employees            |
++----------------------+
+2 rows in set (0.01 sec)
+
+
+mysql> SELECT ClientNO, Name, Address, City, State, bal_due AS BALANCE
+    -> FROM Client12;
++----------+--------------+--------------------------+------------+------------+---------+
+| ClientNO | Name         | Address                  | City       | State      | BALANCE |
++----------+--------------+--------------------------+------------+------------+---------+
+| C123     | Tilak Sharma | Kumaripati, Lalitpur     | Lalitpur   | Bagmati    | 5100.00 |
+| C124     | Janaki       | Lakeside, Pokhara        | Pokhara    | Gandaki    | 4500.00 |
+| C125     | Ramu Mahato  | Biratnagar-4, Biratnagar | Biratnagar | Province 1 | 5200.00 |
+| C126     | Sita Khavas  | Putalisadak, Kathmandu   | Kathmandu  | Bagmati    | 7000.00 |
+| C127     | Aryan Mishra | Dharan-8, Dharan         | Dharan     | Province 1 | 3000.00 |
++----------+--------------+--------------------------+------------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql>

@@ -1,0 +1,112 @@
+sumit-Inspiron-15-3580% sudo mysql
+[sudo] password for sumit:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.37-0ubuntu0.22.04.3 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+
+
+mysql> use Assignment;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> CREATE TABLE Emp (
+    -> Emp_Name VARCHAR(50),
+    -> DECIMAL(10, 2),
+    -> Designation VARCHAR(50),
+    -> Basic DECIMAL(10, 2),
+    -> DA DECIMAL(10, 2),
+    -> RA DECIMAL(10, 2),
+    -> PF DECIMAL(10, 2),
+    -> GrossPay DECIMAL(10, 2),
+    -> NetPay DECIMAL(10, 2)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO Emp (Emp_No, Emp_Name, Designation, Basic, DA, HRA, PF, GrossPay, NetPay) VALUES
+    -> (1, 'Naresh Sharma', 'Manager', 5000.00, 1500.00, 1000.00, 500.00, 7500.00, 7000.00),
+    -> (2, 'Sita Rai', 'Assistant', 3000.00, 800.00, 600.00, 300.00, 4700.00, 4400.00),
+    -> (3, 'Rupaak Kumar', 'Clerk', 2500.00, 600.00, 500.00, 250.00, 3350.00, 3100.00),
+    -> (4, 'Nisha Thapa', 'Manager', 5500.00, 1600.00, 1100.00, 550.00, 8300.00, 7750.00),
+    -> (5, 'jyoti Joshi', 'Assistant', 3200.00, 850.00, 620.00, 320.00, 4990.00, 4670.00);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+
+mysql> UPDATE Emp
+    -> SET PF = Basic * 0.10;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 5  Changed: 0  Warnings: 0
+
+
+mysql> ALTER TABLE Emp ADD COLUMN GrossPay DECIMAL(10, 2);
+mysql> UPDATE Emp
+    -> SET GrossPay = Basic + DA + HRA;
+Query OK, 4 rows affected (0.01 sec)
+Rows matched: 5  Changed: 4  Warnings: 0
+
+mysql> ALTER TABLE Emp ADD COLUMN NetPay DECIMAL(10, 2);
+mysql> UPDATE Emp
+    -> SET NetPay = GrossPay - PF;
+Query OK, 4 rows affected (0.01 sec)
+Rows matched: 5  Changed: 4  Warnings: 0
+
+mysql> SELECT * FROM Emp;
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+| Emp_No | Emp_Name      | Designation | Basic   | DA      | HRA     | PF     | GrossPay | NetPay  |
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+|      1 | Naresh Sharma | Manager     | 5000.00 | 1500.00 | 1000.00 | 500.00 |  7500.00 | 7000.00 |
+|      2 | Sita Rai      | Assistant   | 3000.00 |  900.00 |  600.00 | 300.00 |  4500.00 | 4200.00 |
+|      3 | Rupaak Kumar  | Clerk       | 2500.00 |  750.00 |  500.00 | 250.00 |  3750.00 | 3500.00 |
+|      4 | Nisha Thapa   | Manager     | 5500.00 | 1650.00 | 1100.00 | 550.00 |  8250.00 | 7700.00 |
+|      5 | jyoti Joshi   | Assistant   | 3200.00 |  960.00 |  640.00 | 320.00 |  4800.00 | 4480.00 |
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+5 rows in set (0.00 sec)
+
+
+mysql> WITH MinBasic AS (
+    -> SELECT Designation, MIN(Basic) AS Min_Basic
+    -> FROM Emp
+    -> GROUP BY Designation
+    -> )
+    -> SELECT e.*
+    -> FROM Emp e
+    -> JOIN MinBasic mb ON e.Designation = mb.Designation AND e.Basic = mb.Min_Basic;
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+| Emp_No | Emp_Name      | Designation | Basic   | DA      | HRA     | PF     | GrossPay | NetPay  |
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+|      1 | Naresh Sharma | Manager     | 5000.00 | 1500.00 | 1000.00 | 500.00 |  7500.00 | 7000.00 |
+|      2 | Sita Rai      | Assistant   | 3000.00 |  900.00 |  600.00 | 300.00 |  4500.00 | 4200.00 |
+|      3 | Rupaak Kumar  | Clerk       | 2500.00 |  750.00 |  500.00 | 250.00 |  3750.00 | 3500.00 |
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE Emp
+    -> SET NetPay = NetPay + 1200
+    -> WHERE NetPay < 10000;
+Query OK, 5 rows affected (0.01 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+
+mysql> SELECT * FROM Emp;
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+| Emp_No | Emp_Name      | Designation | Basic   | DA      | HRA     | PF     | GrossPay | NetPay  |
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+|      1 | Naresh Sharma | Manager     | 5000.00 | 1500.00 | 1000.00 | 500.00 |  7500.00 | 8200.00 |
+|      2 | Sita Rai      | Assistant   | 3000.00 |  900.00 |  600.00 | 300.00 |  4500.00 | 5400.00 |
+|      3 | Rupaak Kumar  | Clerk       | 2500.00 |  750.00 |  500.00 | 250.00 |  3750.00 | 4700.00 |
+|      4 | Nisha Thapa   | Manager     | 5500.00 | 1650.00 | 1100.00 | 550.00 |  8250.00 | 8900.00 |
+|      5 | jyoti Joshi   | Assistant   | 3200.00 |  960.00 |  640.00 | 320.00 |  4800.00 | 5680.00 |
++--------+---------------+-------------+---------+---------+---------+--------+----------+---------+
+5 rows in set (0.00 sec)
+
+mysql>
